@@ -1,4 +1,4 @@
-module aes_wrapper(
+module tt_um_superphenix2002(
 input logic mosi,
 output logic miso,
 input logic sclk,             // SPI clk = 100MHz
