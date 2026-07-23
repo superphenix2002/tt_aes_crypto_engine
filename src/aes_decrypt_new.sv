@@ -32,6 +32,7 @@ output logic [7:0] out_plain_mat31,
 output logic [7:0] out_plain_mat32,
 output logic [7:0] out_plain_mat33,
 input logic reset,
+output logic ready,
 input logic [127:0] keys0,
 input logic [127:0] keys1,
 input logic [127:0] keys2,
@@ -336,7 +337,7 @@ mix_cols_inverse mix_cols_inv1(
 always_ff @(posedge clk) begin
 if(reset)begin
 encrypt_cnt <= 6'b000000;
-
+ready <= 1'b0;
 //initialize s_box
 
 s_box_inv[0][0] <= 8'h52;
@@ -666,6 +667,22 @@ mix_cols_data_mat31 <= 8'h00;
 mix_cols_data_mat32 <= 8'h00;
 mix_cols_data_mat33 <= 8'h00;
 
+out_plain_mat00 <= out_plain_mat00;
+out_plain_mat01 <= out_plain_mat01;
+out_plain_mat02 <= out_plain_mat02;
+out_plain_mat03 <= out_plain_mat03;
+out_plain_mat10 <= out_plain_mat10;
+out_plain_mat11 <= out_plain_mat11;
+out_plain_mat12 <= out_plain_mat12;
+out_plain_mat13 <= out_plain_mat13;
+out_plain_mat20 <= out_plain_mat20;
+out_plain_mat21 <= out_plain_mat21;
+out_plain_mat22 <= out_plain_mat22;
+out_plain_mat23 <= out_plain_mat23;
+out_plain_mat30 <= out_plain_mat30;
+out_plain_mat31 <= out_plain_mat31;
+out_plain_mat32 <= out_plain_mat32;
+out_plain_mat33 <= out_plain_mat33;
 end
 else begin
 
@@ -966,6 +983,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -1053,6 +1071,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1142,6 +1161,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1231,6 +1251,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -1318,6 +1339,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1407,6 +1429,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1496,6 +1519,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1585,6 +1609,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -1672,6 +1697,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1761,6 +1787,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1850,6 +1877,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1939,6 +1967,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -2026,6 +2055,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2115,6 +2145,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2204,6 +2235,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2293,6 +2325,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -2380,6 +2413,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2469,6 +2503,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2558,6 +2593,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2647,6 +2683,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -2734,6 +2771,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2823,6 +2861,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2912,6 +2951,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3001,6 +3041,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -3088,6 +3129,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3177,6 +3219,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3266,6 +3309,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3355,6 +3399,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -3442,6 +3487,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3531,6 +3577,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3620,6 +3667,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3709,6 +3757,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -3796,6 +3845,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3885,6 +3935,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3974,6 +4025,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4063,6 +4115,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -4150,6 +4203,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4239,6 +4293,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4328,6 +4383,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4417,6 +4473,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -4504,6 +4561,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4593,6 +4651,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4682,6 +4741,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4771,6 +4831,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -4858,6 +4919,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4947,6 +5009,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5035,6 +5098,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5124,6 +5188,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -5211,6 +5276,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5300,6 +5366,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5389,6 +5456,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5478,6 +5546,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -5565,6 +5634,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5654,6 +5724,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5743,6 +5814,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5832,6 +5904,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -5903,6 +5976,7 @@ out_plain_mat31 <= add_rnd_key_out_mat31;
 out_plain_mat32 <= add_rnd_key_out_mat32;
 out_plain_mat33 <= add_rnd_key_out_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b1;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5992,6 +6066,7 @@ out_plain_mat31 <= out_plain_mat31;
 out_plain_mat32 <= out_plain_mat32;
 out_plain_mat33 <= out_plain_mat33;
 encrypt_cnt <= encrypt_cnt;
+ready <= 1'b1;
 
 add_rnd_key_key1 <= {128{1'b0}};
 

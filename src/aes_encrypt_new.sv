@@ -31,6 +31,7 @@ output logic [7:0] out_cipher_mat30,
 output logic [7:0] out_cipher_mat31,
 output logic [7:0] out_cipher_mat32,
 output logic [7:0] out_cipher_mat33,
+output logic ready,
 input logic reset,
 input logic [127:0] keys0,
 input logic [127:0] keys1,
@@ -333,7 +334,7 @@ mix_cols mix_cols1(
 always_ff @(posedge clk) begin
 if(reset)begin
 encrypt_cnt <= 6'b000000;
-
+ready <= 1'b0;
 //initialize s_box
 
 s_box[0][0] <= 8'h63;
@@ -663,6 +664,22 @@ mix_cols_data_mat31 <= 8'h00;
 mix_cols_data_mat32 <= 8'h00;
 mix_cols_data_mat33 <= 8'h00;
 
+out_cipher_mat00 <= out_cipher_mat00;
+out_cipher_mat01 <= out_cipher_mat01;
+out_cipher_mat02 <= out_cipher_mat02;
+out_cipher_mat03 <= out_cipher_mat03;
+out_cipher_mat10 <= out_cipher_mat10;
+out_cipher_mat11 <= out_cipher_mat11;
+out_cipher_mat12 <= out_cipher_mat12;
+out_cipher_mat13 <= out_cipher_mat13;
+out_cipher_mat20 <= out_cipher_mat20;
+out_cipher_mat21 <= out_cipher_mat21;
+out_cipher_mat22 <= out_cipher_mat22;
+out_cipher_mat23 <= out_cipher_mat23;
+out_cipher_mat30 <= out_cipher_mat30;
+out_cipher_mat31 <= out_cipher_mat31;
+out_cipher_mat32 <= out_cipher_mat32;
+out_cipher_mat33 <= out_cipher_mat33;
 end
 else begin
 
@@ -923,11 +940,7 @@ s_box[15][13] <= s_box[15][13];
 s_box[15][14] <= s_box[15][14];
 s_box[15][15] <= s_box[15][15];
 
-/*
-case(encrypt)
 
-endcase
-*/
 if(encrypt_cnt == 6'b000000)begin
 add_rnd_key_key1 <= keys0;
 add_rnd_key_data_mat00 <= data_aes_mat00;
@@ -963,6 +976,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -1051,6 +1065,7 @@ out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
 add_rnd_key_key1 <= {128{1'b0}};
+ready <= 1'b0;
 
 add_rnd_key_data_mat00 <= 8'h00;
 add_rnd_key_data_mat01 <= 8'h00;
@@ -1137,6 +1152,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1226,6 +1242,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1316,6 +1333,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -1403,6 +1421,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1492,6 +1511,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1581,6 +1601,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1671,6 +1692,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -1758,6 +1780,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1847,6 +1870,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -1936,6 +1960,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2026,6 +2051,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -2113,6 +2139,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2202,6 +2229,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2291,6 +2319,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2381,6 +2410,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -2468,6 +2498,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2557,6 +2588,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2646,6 +2678,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2736,6 +2769,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -2823,6 +2857,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -2912,6 +2947,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3001,6 +3037,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3091,6 +3128,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -3178,6 +3216,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3267,6 +3306,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3356,6 +3396,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3446,6 +3487,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -3533,6 +3575,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3622,6 +3665,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3711,6 +3755,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3801,6 +3846,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -3888,6 +3934,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -3977,6 +4024,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4066,6 +4114,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4156,6 +4205,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -4243,6 +4293,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4332,6 +4383,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4421,6 +4473,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4511,6 +4564,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -4598,6 +4652,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4687,6 +4742,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4776,6 +4832,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -4866,6 +4923,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -4953,6 +5011,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5042,6 +5101,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5131,6 +5191,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5221,6 +5282,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -5308,6 +5370,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5397,6 +5460,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5486,6 +5550,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5576,6 +5641,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -5663,6 +5729,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5752,6 +5819,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -5842,6 +5910,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b0;
 
 sub_bytes_data_mat00 <= 8'h00;
 sub_bytes_data_mat01 <= 8'h00;
@@ -5913,6 +5982,7 @@ out_cipher_mat31 <= add_rnd_key_out_mat31;
 out_cipher_mat32 <= add_rnd_key_out_mat32;
 out_cipher_mat33 <= add_rnd_key_out_mat33;
 encrypt_cnt <= encrypt_cnt + 6'b000001;
+ready <= 1'b1;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
@@ -6003,6 +6073,7 @@ out_cipher_mat31 <= out_cipher_mat31;
 out_cipher_mat32 <= out_cipher_mat32;
 out_cipher_mat33 <= out_cipher_mat33;
 encrypt_cnt <= encrypt_cnt;
+ready <= 1'b1;
 
 add_rnd_key_key1 <= {128{1'b0}};
 
