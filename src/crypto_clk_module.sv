@@ -4,82 +4,51 @@ input logic ss,
 output logic crypto_clk
 );
 
-logic [3:0] clk_cnt;
+logic [2:0] clk_cnt;
 
-always_ff @(posedge clk) begin
 if(!ss) begin
+always_ff @(posedge clk) begin
 case(clk_cnt)
-4'b0000:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b0;
-end
-4'b0001:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b0;
-end
-4'b0010:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b0;
-end
-4'b0011:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b0;
-end
-4'b0100:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b0;
-end
-4'b0101:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b0;
-end
-4'b0110:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b0;
-end
-4'b0111:begin
+3'b000:begin
 clk_cnt <= clk_cnt + 1;
 crypto_clk <= 1'b1;
 end
-4'b1000:begin
+3'b001:begin
 clk_cnt <= clk_cnt + 1;
 crypto_clk <= 1'b1;
 end
-4'b1001:begin
+3'b010:begin
 clk_cnt <= clk_cnt + 1;
 crypto_clk <= 1'b1;
 end
-4'b1010:begin
+3'b011:begin
 clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b1;
-end
-4'b1011:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b1;
-end
-4'b1100:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b1;
-end
-4'b1101:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b1;
-end
-4'b1110:begin
-clk_cnt <= clk_cnt + 1;
-crypto_clk <= 1'b1;
-end
-4'b1111:begin
-clk_cnt <= 4'b0000;
 crypto_clk <= 1'b0;
+end
+3'b100:begin
+clk_cnt <= clk_cnt + 1;
+crypto_clk <= 1'b0;
+end
+3'b101:begin
+clk_cnt <= clk_cnt + 1;
+crypto_clk <= 1'b0;
+end
+3'b110:begin
+clk_cnt <= clk_cnt + 1;
+crypto_clk <= 1'b0;
+end
+3'b111:begin
+clk_cnt <= 3'b000;
+crypto_clk <= 1'b1;
 end
 endcase
 end
+end
 else begin
-clk_cnt <= 4'b0000;
-crypto_clk <= 1'b0;
+clk_cnt <= 3'b000;
+crypto_clk <= 1'b1;
 end
-end
+
 
 
 endmodule 
