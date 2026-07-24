@@ -1,4 +1,4 @@
-module tt_um_superphenix2002(
+module aes_wrapper(
 input logic mosi,
 output logic miso,
 input logic sclk,             // SPI clk = 100MHz
@@ -78,7 +78,7 @@ dly_module dly1(
 .output_clk(dly_clk));
 
 crypto_engine engine1(
-.clk(clk_crypto),
+.clk(dly_clk),
 .initial_key(initial_key_buff),
 .encrypt(encrypt_buff),
 .reset(reset_buff),
