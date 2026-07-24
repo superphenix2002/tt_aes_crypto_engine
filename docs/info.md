@@ -9,7 +9,12 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+The AES 256 cryptography engine encrypts/decrypts strings of 128 bit data at a time using a 256 bit key.
+It communicates over SPI at a speed of 60MHz acting as a slave receiver.
+
+All 14 rounds of encryption/decryption are done by the ASIC, including generation of round keys.
+
+Communication is done over SPI using certain 8 bit command words as follows :
 
 ## How to test
 
