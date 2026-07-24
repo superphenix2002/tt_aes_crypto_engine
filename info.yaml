@@ -2,7 +2,7 @@
 project:
   title:        "AES 256 cryptography engine"      # Project title
   author:       "Anirban Sarkar"      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  discord:      "Zener Diode"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "An ASIC which can perform AES 256 encryption and deryption over SPI communication"      # One line description of what your project does
   language:     "SystemVerilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     60000000       # Clock frequency in Hz (or 0 if not applicable)
