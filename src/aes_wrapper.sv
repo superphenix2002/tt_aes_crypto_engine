@@ -2554,43 +2554,35 @@ if(!ss) begin
 //mosi driver
 case(mosi_cnt)
 3'b000:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
 3'b001:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
 3'b0010:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
 3'b011:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
 3'b100:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
 3'b101:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
 3'b110:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
 3'b111:begin
-rx_buff[0] <= mosi;
-rx_buff <= rx_buff << 1;
+rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= 3'b000;
 end
 endcase
