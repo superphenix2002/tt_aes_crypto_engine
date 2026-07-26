@@ -1,6 +1,6 @@
 `timescale 1ns/100ps
 
-module tb_aes_asic;
+module tb;
 
 
 
@@ -24,11 +24,11 @@ assign sclk_act = sclk | ss;
 
 initial begin
 $dumpfile("waveform_aes_asic.vcd");  // Create a waveform file 
-$dumpvars(0,tb_aes_asic.mosi); 
-$dumpvars(0,tb_aes_asic.miso); 
-$dumpvars(0,tb_aes_asic.sclk);
-$dumpvars(0,tb_aes_asic.sclk_act);
-$dumpvars(0,tb_aes_asic.ss); 
+$dumpvars(0,tb.mosi); 
+$dumpvars(0,tb.miso); 
+$dumpvars(0,tb.sclk);
+$dumpvars(0,tb.sclk_act);
+$dumpvars(0,tb.ss); 
 
 ss = 1'b1;
 sclk = 1'b1;
