@@ -1,9 +1,8 @@
 module aes_wrapper(
 input logic mosi,
 output logic miso,
-input logic sclk,             // SPI clk = 100MHz
-input logic ss,
-input logic rst);              //CPOL - 1 , CPHA - 1     , ss active low             always reset chip once before starting communication with it, (rst high)
+input logic sclk,             // SPI clk = 60MHz
+input logic ss);              //CPOL - 1 , CPHA - 1     , ss active low             always reset chip once before starting communication with it, (rst high)
 
 logic key_sampling_mode;   //sampling 256 bit key mode         ,cmd word :  01 hex            MSB first
 logic operation_mode;      //encryption or decryption selection mode  , cmd word :  02 hex
@@ -116,9 +115,7 @@ crypto_engine engine1(
 .data_aes_out33(output_buff33),
 .ready(output_rdy));
 
-always_ff @(posedge dly_clk) begin
-
-if(rst)begin                          //reset
+always_ff @(negedge ss)begin                   //reset
 op_cnt <= 6'b000000;
 key_sampling_mode <= 1'b0;
 operation_mode <= 1'b0;
@@ -149,7 +146,8 @@ key_ok <= 1'b0;
 crypto_ok <= 1'b0;
 data_ok <= 1'b0;
 end
-else begin                          //not reset
+
+always_ff @(posedge dly_clk) begin
 if(!ss) begin                     // ss is low , chip enabled
 //setting up modes
 if((rx_buff == 2'h01)&&(!inhibit))begin        //key sampling mode
@@ -2501,7 +2499,6 @@ key_ok <= key_ok;
 crypto_ok <= crypto_ok;
 data_ok <= data_ok;
 op_cnt <= op_cnt;
-end
 end
 end
 
