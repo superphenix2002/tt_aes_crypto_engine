@@ -113,8 +113,10 @@ logic [7:0] out_cipher_mat30;
 logic [7:0] out_cipher_mat31;
 logic [7:0] out_cipher_mat32;
 logic [7:0] out_cipher_mat33;
+logic rdy_dec_inhibit;
+logic rdy_enc_inhibit;
 
-assign ready = ready_decrypt | ready_encrypt;
+assign ready = (ready_decrypt & rdy_dec_inhibit) | (ready_encrypt & rdy_enc_inhibit);
 
 gen_round_keys gen_round_keys1(
 .init_key(initial_key_reg),
@@ -548,13 +550,13 @@ logic_count <= 3'b000;
 logic_count_decrypt <= 5'b00000;
 reset_decrypt <= 1'b0;
 reset_encrypt <= 1'b0;
+rdy_dec_inhibit <= 1'b0;
+rdy_enc_inhibit <= 1'b0;
 if(encrypt) begin          //encrypt
 encrypt_status <= 1'b1;
-
 end
 else begin            //decrypt
 encrypt_status <= 1'b0;
-
 end
 end
 else begin                        //not reset
@@ -562,20 +564,25 @@ initial_key_reg <= initial_key_reg;
 
 encrypt_status <= encrypt_status;
 
+
 if(encrypt_status == 1'b1) begin  //encrypt
 logic_count_decrypt <= 5'b00000;
 reset_decrypt <= 1'b0;
+rdy_dec_inhibit <= 1'b0;
 if(logic_count == 3'b011)begin
 logic_count <= 3'b100;
 reset_encrypt <= 1'b1;
+rdy_enc_inhibit <= 1'b0;
 end
 else if(logic_count < 3'b011) begin
 logic_count <= logic_count + 3'b001;
 reset_encrypt <= 1'b0;
+rdy_enc_inhibit <= 1'b0;
 end
 else begin
 logic_count <= logic_count;
 reset_encrypt <= 1'b0;
+rdy_enc_inhibit <= 1'b1;
 end
 data_aes_out00 <= out_cipher_mat00;
 data_aes_out01 <= out_cipher_mat01;
@@ -597,17 +604,21 @@ end
 else if(encrypt_status == 1'b0) begin            //decrypt
 logic_count <= 3'b000;
 reset_encrypt <= 1'b0;
+rdy_enc_inhibit <= 1'b0;
 if(logic_count_decrypt == 5'b01111)begin
 logic_count_decrypt <= 5'b10000;
 reset_decrypt <= 1'b1;
+rdy_dec_inhibit <= 1'b0;
 end
 else if(logic_count_decrypt < 5'b01111) begin
 logic_count_decrypt <= logic_count_decrypt + 5'b00001;
 reset_decrypt <= 1'b0;
+rdy_dec_inhibit <= 1'b0;
 end
 else begin
 logic_count_decrypt <= logic_count_decrypt;
 reset_decrypt <=1'b0;
+rdy_dec_inhibit <= 1'b1;
 end
 data_aes_out00 <= out_plain_mat00;
 data_aes_out01 <= out_plain_mat01;

@@ -150,8 +150,9 @@ end
 always_ff @(posedge dly_clk) begin
 if(!ss) begin                     // ss is low , chip enabled
 //setting up modes
-if((rx_buff == 2'h01)&&(!inhibit))begin        //key sampling mode
+if((rx_buff == 8'h01)&&(!inhibit))begin        //key sampling mode
 op_cnt <= 6'b000000;
+
 key_sampling_mode <= 1'b1;
 operation_mode <= 1'b0;
 input_data_mode <= 1'b0;
@@ -181,8 +182,9 @@ key_ok <= 1'b0;
 crypto_ok <= crypto_ok;
 data_ok <= data_ok;
 end
-else if((rx_buff == 2'h02)&&(!inhibit))begin        //operation mode
+else if((rx_buff == 8'h02)&&(!inhibit))begin        //operation mode
 op_cnt <= 6'b000000;
+
 key_sampling_mode <= 1'b0;
 operation_mode <= 1'b1;
 input_data_mode <= 1'b0;
@@ -212,8 +214,9 @@ key_ok <= key_ok;
 crypto_ok <= 1'b0;
 data_ok <= data_ok;
 end
-else if((rx_buff == 2'h03)&&(!inhibit))begin        //input data mode
+else if((rx_buff == 8'h03)&&(!inhibit))begin        //input data mode
 op_cnt <= 6'b000000;
+
 key_sampling_mode <= 1'b0;
 operation_mode <= 1'b0;
 input_data_mode <= 1'b1;
@@ -243,8 +246,9 @@ key_ok <= key_ok;
 crypto_ok <= crypto_ok;
 data_ok <= 1'b0;
 end
-else if((rx_buff == 2'h04)&&(!inhibit))begin        //interrogate mode
+else if((rx_buff == 8'h04)&&(!inhibit))begin        //interrogate mode
 op_cnt <= 6'b000000;
+
 key_sampling_mode <= 1'b0;
 operation_mode <= 1'b0;
 input_data_mode <= 1'b0;
@@ -274,8 +278,9 @@ key_ok <= key_ok;
 crypto_ok <= crypto_ok;
 data_ok <= data_ok;
 end
-else if((rx_buff == 2'h05)&&(!inhibit))begin        //output data mode
+else if((rx_buff == 8'h05)&&(!inhibit))begin        //output data mode
 op_cnt <= 6'b000000;
+
 key_sampling_mode <= 1'b0;
 operation_mode <= 1'b0;
 input_data_mode <= 1'b0;
@@ -307,7 +312,7 @@ data_ok <= data_ok;
 end
 
 //
-if(key_sampling_mode) begin         //key input
+else if(key_sampling_mode) begin         //key input
 case(op_cnt)
 6'b000000: begin
 input_buff00 <= input_buff00;
@@ -333,6 +338,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -364,6 +370,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -395,6 +402,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -426,6 +434,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -457,6 +466,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -488,6 +498,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -519,6 +530,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -550,6 +562,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -581,6 +594,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -612,6 +626,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -643,6 +658,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -674,6 +690,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -705,6 +722,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -736,6 +754,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -767,6 +786,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -798,6 +818,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -829,6 +850,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -860,6 +882,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -891,6 +914,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -922,6 +946,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -953,6 +978,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -984,6 +1010,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1015,6 +1042,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1046,6 +1074,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1077,6 +1106,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1108,6 +1138,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1139,6 +1170,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1170,6 +1202,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1201,6 +1234,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1232,6 +1266,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1263,6 +1298,7 @@ key_sampling_mode <= key_sampling_mode;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= inhibit;
 key_ok <= 1'b0;
@@ -1294,6 +1330,7 @@ key_sampling_mode <= 1'b0;
 operation_mode <= operation_mode;
 input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
+
 interrogate <= interrogate;
 inhibit <= 1'b0;
 key_ok <= 1'b1;
@@ -1304,7 +1341,7 @@ end
 endcase
 end
 //
-if(operation_mode)begin              //operation choice encrypt or decrypt
+else if(operation_mode)begin              //operation choice encrypt or decrypt
 case(op_cnt)
 6'b000000:begin
 input_buff00 <= input_buff00;
@@ -1349,7 +1386,7 @@ endcase
 end
 //
 //
-if(input_mode)begin              //input data mode
+else if(input_mode)begin              //input data mode
 case(op_cnt)
 6'b000000:begin
 input_buff00 <= rx_buff;
@@ -1851,7 +1888,7 @@ endcase
 end
 //
 //
-if(interrogate)begin              //interrogate mode
+else if(interrogate)begin              //interrogate mode
 case(op_cnt)
 6'b000000:begin
 if(output_rdy)begin
@@ -1893,7 +1930,7 @@ endcase
 end
 //
 //
-if(output_data_mode)begin                 //outputs data
+else if(output_data_mode)begin                 //outputs data
 case(op_cnt)
 6'b000000:begin
 input_buff00 <= input_buff00;
@@ -2394,10 +2431,8 @@ end
 endcase
 end
 //
-//
-if((!key_sampling_mode)&&(!operation_mode)&&(!input_data_mode)&&(!inhibit)&&(rx_buff != 2'h01)&&(rx_buff != 2'h02)&&(rx_buff != 2'h03))begin           //no mode case
-case(op_cnt)
-6'b000000:begin
+//no mode case
+else if((!key_sampling_mode)&&(!operation_mode)&&(!input_data_mode)&&(rx_buff != 2'h01)&&(rx_buff != 2'h02)&&(rx_buff != 2'h03))begin           
 input_buff00 <= input_buff00;
 input_buff01 <= input_buff01;
 input_buff02 <= input_buff02;
@@ -2426,15 +2461,9 @@ inhibit <= inhibit;
 key_ok <= 1'b0;
 crypto_ok <= 1'b0;
 data_ok <= 1'b0;
-op_cnt <= 6'b000000;
+op_cnt <= op_cnt;
 end
-endcase
-end
-//
-//
-if((!interrogate)&&(!output_data_mode)&&(!inhibit)&&(rx_buff != 2'h04)&&(rx_buff != 2'h05))begin           //no mode case
-case(op_cnt)
-6'b000000:begin
+else if((!interrogate)&&(!output_data_mode)&&(rx_buff != 2'h04)&&(rx_buff != 2'h05))begin
 input_buff00 <= input_buff00;
 input_buff01 <= input_buff01;
 input_buff02 <= input_buff02;
@@ -2463,9 +2492,8 @@ inhibit <= inhibit;
 key_ok <= key_ok;
 crypto_ok <= crypto_ok;
 data_ok <= data_ok;
-op_cnt <= 6'b000000;
+op_cnt <= op_cnt;
 end
-endcase
 end
 //
 end
