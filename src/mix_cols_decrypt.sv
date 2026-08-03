@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2024 Anirban Sarkar
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+`default_nettype none
+
+
 module mix_cols_inverse(input logic [7:0] data_mat00,
 input logic [7:0] data_mat01,
 input logic [7:0] data_mat02,
