@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024 Anirban Sarkar
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 module crypto_engine(input logic clk,
 input logic [7:0] data_aes_in00,
 input logic [7:0] data_aes_in01,
