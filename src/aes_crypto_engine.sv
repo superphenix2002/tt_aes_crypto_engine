@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+`default_nettype none
+
+
 module crypto_engine(input logic clk,
 input logic [7:0] data_aes_in00,
 input logic [7:0] data_aes_in01,
