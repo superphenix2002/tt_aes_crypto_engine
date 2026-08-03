@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2024 Anirban Sarkar
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+`default_nettype none
+
+
 module crypto_clk_synth(
 input logic clk,
 input logic ss,
