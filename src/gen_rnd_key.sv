@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2024 Anirban Sarkar
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+`default_nettype none
+
+
 module gen_round_keys(input logic [255:0] init_key,
 input logic [7:0] s_box[16][16],
 input logic [31:0] rcon[8],
