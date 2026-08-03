@@ -193,8 +193,6 @@ logic [7:0] mix_cols_out_mat31;
 logic [7:0] mix_cols_out_mat32;
 logic [7:0] mix_cols_out_mat33;
 
-assign encrypt_count = encrypt_cnt;
-
 add_rnd_key add_rnd_key1(
 .data_mat00(add_rnd_key_data_mat00),
 .data_mat01(add_rnd_key_data_mat01),

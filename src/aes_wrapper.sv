@@ -2,7 +2,21 @@ module aes_wrapper(
 input logic mosi,
 output logic miso,
 input logic sclk,             // SPI clk = 60MHz
-input logic ss);              //CPOL - 1 , CPHA - 1     , ss active low             always reset chip once before starting communication with it, (rst high)
+input logic ss,
+input logic reset,
+output logic delay_clock,
+output logic [7:0] rx_buff_1,
+output logic [7:0] tx_buff_1,
+output logic key_ok_1,
+output logic data_ok_1,
+output logic crypto_ok_1,
+output logic key_sampling_mode_1,
+output logic input_data_mode_1,
+output logic output_data_mode_1,
+output logic interrogate_1,
+output logic operation_mode_1,
+output logic [255:0] initial_key_buff_1,
+output logic encrypt_buff_1);              //CPOL - 1 , CPHA - 1     , ss active low             always reset chip once before starting communication with it, (rst high)
 
 logic key_sampling_mode;   //sampling 256 bit key mode         ,cmd word :  01 hex            MSB first
 logic operation_mode;      //encryption or decryption selection mode  , cmd word :  02 hex
@@ -22,6 +36,7 @@ logic inhibit;            //inhibits start of any other mode while mode is activ
 logic [7:0] rx_buff;
 logic [7:0] tx_buff;
 logic [5:0] op_cnt;
+logic [3:0] sel_logic;
 logic clk_crypto;
 logic dly_clk;
 
@@ -66,11 +81,26 @@ logic [7:0] output_buff32;
 logic [7:0] output_buff33;
 
 assign reset_buff = key_ok & data_ok & crypto_ok;
+assign delay_clock = dly_clk;
+assign rx_buff_1 = rx_buff;
+assign tx_buff_1 = tx_buff;
+assign key_ok_1 = key_ok;
+assign data_ok_1 = data_ok;
+assign crypto_ok_1 = crypto_ok;
+assign key_sampling_mode_1 = key_sampling_mode;
+assign input_data_mode_1 = input_data_mode;
+assign operation_mode_1 = operation_mode;
+assign output_data_mode_1 = output_data_mode;
+assign interrogate_1 = interrogate;
+assign initial_key_buff_1 = initial_key_buff;
+assign encrypt_buff_1 = encrypt_buff;
+
 
 crypto_clk_synth synth1(
 .clk(sclk),
 .ss(ss),
-.crypto_clk(clk_crypto));
+.crypto_clk(clk_crypto),
+.reset(reset));
 
 dly_module dly1(
 .input_clk(clk_crypto),
@@ -115,41 +145,41 @@ crypto_engine engine1(
 .data_aes_out33(output_buff33),
 .ready(output_rdy));
 
-always_ff @(negedge ss)begin                   //reset
-op_cnt <= 6'b000000;
-key_sampling_mode <= 1'b0;
-operation_mode <= 1'b0;
-input_data_mode <= 1'b0;
-output_data_mode <= 1'b0;
-interrogate <= 1'b0;
+
+always_ff @(posedge dly_clk or negedge reset) begin                  
+//setting up modes
+if(!reset) begin
 inhibit <= 1'b0;
-tx_buff <= 8'h00;    
-input_buff00 <= 8'h00;
-input_buff01 <= 8'h00;
-input_buff02 <= 8'h00;
-input_buff03 <= 8'h00;
-input_buff10 <= 8'h00;
-input_buff11 <= 8'h00;
-input_buff12 <= 8'h00;
-input_buff13 <= 8'h00;
-input_buff20 <= 8'h00;
-input_buff21 <= 8'h00;
-input_buff22 <= 8'h00;
-input_buff23 <= 8'h00;
-input_buff30 <= 8'h00;
-input_buff31 <= 8'h00;
-input_buff32 <= 8'h00;
-input_buff33 <= 8'h00;
-encrypt_buff <= 1'b0;
-initial_key_buff <= {256{1'b0}};
+input_buff00 <= input_buff00;
+input_buff01 <= input_buff01;
+input_buff02 <= input_buff02;
+input_buff03 <= input_buff03;
+input_buff10 <= input_buff10;
+input_buff11 <= input_buff11;
+input_buff12 <= input_buff12;
+input_buff13 <= input_buff13;
+input_buff20 <= input_buff20;
+input_buff21 <= input_buff21;
+input_buff22 <= input_buff22;
+input_buff23 <= input_buff23;
+input_buff30 <= input_buff30;
+input_buff31 <= input_buff31;
+input_buff32 <= input_buff32;
+input_buff33 <= input_buff33;
+encrypt_buff <= encrypt_buff;
+tx_buff <= 8'h00;
+initial_key_buff <= initial_key_buff;
+key_sampling_mode <= key_sampling_mode;
+operation_mode <= operation_mode;
+input_data_mode <= input_data_mode;
+output_data_mode <= output_data_mode;
+interrogate <= interrogate;
 key_ok <= 1'b0;
 crypto_ok <= 1'b0;
 data_ok <= 1'b0;
+op_cnt <= 6'b000000;
 end
-
-always_ff @(posedge dly_clk) begin
-if(!ss) begin                     // ss is low , chip enabled
-//setting up modes
+else begin
 if((rx_buff == 8'h01)&&(!inhibit))begin        //key sampling mode
 op_cnt <= 6'b000000;
 
@@ -1360,10 +1390,10 @@ input_buff30 <= input_buff30;
 input_buff31 <= input_buff31;
 input_buff32 <= input_buff32;
 input_buff33 <= input_buff33;
-if(rx_buff == 2'h01)begin
+if(rx_buff == 8'h01)begin
 encrypt_buff <= 1'b1;             //encrypt
 end
-else if(rx_buff == 2'h00)begin
+else if(rx_buff == 8'h00)begin
 encrypt_buff <= 1'b0;              //decrypt
 end
 else begin
@@ -1386,7 +1416,7 @@ endcase
 end
 //
 //
-else if(input_mode)begin              //input data mode
+else if(input_data_mode)begin              //input data mode
 case(op_cnt)
 6'b000000:begin
 input_buff00 <= rx_buff;
@@ -1921,9 +1951,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= 1'b0;
 inhibit <= 1'b0;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= 6'b000000;
 end
 endcase
@@ -1958,9 +1988,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b000001:begin
@@ -1989,9 +2019,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b000010:begin
@@ -2020,9 +2050,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b000011:begin
@@ -2051,9 +2081,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b000100:begin
@@ -2082,9 +2112,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b000101:begin
@@ -2113,9 +2143,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b000110:begin
@@ -2144,9 +2174,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b000111:begin
@@ -2175,9 +2205,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001000:begin
@@ -2206,9 +2236,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001001:begin
@@ -2237,9 +2267,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001010:begin
@@ -2268,9 +2298,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001011:begin
@@ -2299,9 +2329,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001100:begin
@@ -2330,9 +2360,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001101:begin
@@ -2361,9 +2391,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001110:begin
@@ -2392,9 +2422,9 @@ input_data_mode <= input_data_mode;
 output_data_mode <= output_data_mode;
 interrogate <= interrogate;
 inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= op_cnt + 1;
 end
 6'b001111:begin
@@ -2423,16 +2453,15 @@ input_data_mode <= input_data_mode;
 output_data_mode <= 1'b0;
 interrogate <= interrogate;
 inhibit <= 1'b0;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
+key_ok <= 1'b0;
+crypto_ok <= 1'b0;
+data_ok <= 1'b0;
 op_cnt <= 6'b000000;
 end
 endcase
 end
 //
-//no mode case
-else if((!key_sampling_mode)&&(!operation_mode)&&(!input_data_mode)&&(rx_buff != 2'h01)&&(rx_buff != 2'h02)&&(rx_buff != 2'h03))begin           
+else begin
 input_buff00 <= input_buff00;
 input_buff01 <= input_buff01;
 input_buff02 <= input_buff02;
@@ -2463,76 +2492,17 @@ crypto_ok <= 1'b0;
 data_ok <= 1'b0;
 op_cnt <= op_cnt;
 end
-else if((!interrogate)&&(!output_data_mode)&&(rx_buff != 2'h04)&&(rx_buff != 2'h05))begin
-input_buff00 <= input_buff00;
-input_buff01 <= input_buff01;
-input_buff02 <= input_buff02;
-input_buff03 <= input_buff03;
-input_buff10 <= input_buff10;
-input_buff11 <= input_buff11;
-input_buff12 <= input_buff12;
-input_buff13 <= input_buff13;
-input_buff20 <= input_buff20;
-input_buff21 <= input_buff21;
-input_buff22 <= input_buff22;
-input_buff23 <= input_buff23;
-input_buff30 <= input_buff30;
-input_buff31 <= input_buff31;
-input_buff32 <= input_buff32;
-input_buff33 <= input_buff33;
-encrypt_buff <= encrypt_buff;
-tx_buff <= 8'h00;
-initial_key_buff <= initial_key_buff;
-key_sampling_mode <= key_sampling_mode;
-operation_mode <= operation_mode;
-input_data_mode <= input_data_mode;
-output_data_mode <= output_data_mode;
-interrogate <= interrogate;
-inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
-op_cnt <= op_cnt;
-end
-end
-//
-end
-else begin                     //if ss is high
-input_buff00 <= input_buff00;
-input_buff01 <= input_buff01;
-input_buff02 <= input_buff02;
-input_buff03 <= input_buff03;
-input_buff10 <= input_buff10;
-input_buff11 <= input_buff11;
-input_buff12 <= input_buff12;
-input_buff13 <= input_buff13;
-input_buff20 <= input_buff20;
-input_buff21 <= input_buff21;
-input_buff22 <= input_buff22;
-input_buff23 <= input_buff23;
-input_buff30 <= input_buff30;
-input_buff31 <= input_buff31;
-input_buff32 <= input_buff32;
-input_buff33 <= input_buff33;
-encrypt_buff <= encrypt_buff;
-tx_buff <= 8'h00;
-initial_key_buff <= initial_key_buff;
-key_sampling_mode <= key_sampling_mode;
-operation_mode <= operation_mode;
-input_data_mode <= input_data_mode;
-output_data_mode <= output_data_mode;
-interrogate <= interrogate;
-inhibit <= inhibit;
-key_ok <= key_ok;
-crypto_ok <= crypto_ok;
-data_ok <= data_ok;
-op_cnt <= op_cnt;
 end
 end
 
-always_ff @(negedge sclk) begin          
-if(!ss) begin
+always_ff @(negedge sclk or negedge reset) begin          
 //miso driver
+if(!reset) begin
+miso_cnt <= 3'b000;
+miso <= 1'bz;
+end
+else begin
+if(!ss) begin
 case(miso_cnt)
 3'b000:begin
 miso <= tx_buff[7];
@@ -2542,7 +2512,7 @@ end
 miso <= tx_buff[6];
 miso_cnt <= miso_cnt + 1;
 end
-3'b0010:begin
+3'b010:begin
 miso <= tx_buff[5];
 miso_cnt <= miso_cnt + 1;
 end
@@ -2569,14 +2539,19 @@ end
 endcase
 end
 else begin
-miso <= 1'bz;
 miso_cnt <= 3'b000;
+miso <= 1'bz;
+end
 end
 end
 
-always_ff @(posedge sclk) begin
-if(!ss) begin
+always_ff @(posedge sclk or negedge reset) begin
 //mosi driver
+if(!reset) begin
+mosi_cnt <= 3'b000;
+end
+else begin
+if(!ss) begin
 case(mosi_cnt)
 3'b000:begin
 rx_buff <= {{7{1'b0}},mosi};
@@ -2586,7 +2561,7 @@ end
 rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
-3'b0010:begin
+3'b010:begin
 rx_buff <= (rx_buff << 1) | {{7{1'b0}},mosi};
 mosi_cnt <= mosi_cnt + 1;
 end
@@ -2614,6 +2589,8 @@ endcase
 end
 else begin
 mosi_cnt <= 3'b000;
+rx_buff <= 8'h00;
+end
 end
 end
 
