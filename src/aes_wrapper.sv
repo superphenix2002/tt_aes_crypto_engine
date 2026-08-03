@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2024 Anirban Sarkar
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+`default_nettype none
+
+
+
 module tt_um_superphenix2002(
 input logic mosi,
 output logic miso,
