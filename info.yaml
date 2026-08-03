@@ -5,7 +5,7 @@ project:
   discord:      "Zener Diode"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "An ASIC which can perform AES 256 encryption and deryption over SPI communication"      # One line description of what your project does
   language:     "SystemVerilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     60096153       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     60000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
@@ -23,7 +23,6 @@ project:
     - "aes_encrypt_new.sv"
     - "aes_wrapper.sv"
     - "crypto_clk_module.sv"
-    - "delay_module_synth.sv"
     - "gen_rnd_key.sv"
     - "mix_cols.sv"
     - "mix_cols_decrypt.sv"
@@ -38,7 +37,7 @@ pinout:
   ui[0]: "mosi"
   ui[1]: "sclk"
   ui[2]: "ss"
-  ui[3]: "rst"
+  ui[3]: "reset"
   ui[4]: ""
   ui[5]: ""
   ui[6]: ""
