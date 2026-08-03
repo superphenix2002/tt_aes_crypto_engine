@@ -16,7 +16,7 @@ logic sclk_act;
 
 
 
-aes_wrapper asic(
+tt_um_superphenix2002 asic(
 .mosi(mosi),
 .miso(miso),
 .sclk(sclk_act),             // SPI clk = 60MHz
