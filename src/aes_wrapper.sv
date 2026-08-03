@@ -3,20 +3,7 @@ input logic mosi,
 output logic miso,
 input logic sclk,             // SPI clk = 60MHz
 input logic ss,
-input logic reset,
-output logic delay_clock,
-output logic [7:0] rx_buff_1,
-output logic [7:0] tx_buff_1,
-output logic key_ok_1,
-output logic data_ok_1,
-output logic crypto_ok_1,
-output logic key_sampling_mode_1,
-output logic input_data_mode_1,
-output logic output_data_mode_1,
-output logic interrogate_1,
-output logic operation_mode_1,
-output logic [255:0] initial_key_buff_1,
-output logic encrypt_buff_1);              //CPOL - 1 , CPHA - 1     , ss active low             always reset chip once before starting communication with it, (rst high)
+input logic reset);              //CPOL - 1 , CPHA - 1     , ss active low             always reset chip once before starting communication with it, (rst high)
 
 logic key_sampling_mode;   //sampling 256 bit key mode         ,cmd word :  01 hex            MSB first
 logic operation_mode;      //encryption or decryption selection mode  , cmd word :  02 hex
@@ -81,20 +68,6 @@ logic [7:0] output_buff32;
 logic [7:0] output_buff33;
 
 assign reset_buff = key_ok & data_ok & crypto_ok;
-assign delay_clock = dly_clk;
-assign rx_buff_1 = rx_buff;
-assign tx_buff_1 = tx_buff;
-assign key_ok_1 = key_ok;
-assign data_ok_1 = data_ok;
-assign crypto_ok_1 = crypto_ok;
-assign key_sampling_mode_1 = key_sampling_mode;
-assign input_data_mode_1 = input_data_mode;
-assign operation_mode_1 = operation_mode;
-assign output_data_mode_1 = output_data_mode;
-assign interrogate_1 = interrogate;
-assign initial_key_buff_1 = initial_key_buff;
-assign encrypt_buff_1 = encrypt_buff;
-
 
 crypto_clk_synth synth1(
 .clk(sclk),
@@ -102,12 +75,8 @@ crypto_clk_synth synth1(
 .crypto_clk(clk_crypto),
 .reset(reset));
 
-dly_module dly1(
-.input_clk(clk_crypto),
-.output_clk(dly_clk));
-
 crypto_engine engine1(
-.clk(dly_clk),
+.clk(clk_crypto),
 .initial_key(initial_key_buff),
 .encrypt(encrypt_buff),
 .reset(reset_buff),
@@ -146,7 +115,7 @@ crypto_engine engine1(
 .ready(output_rdy));
 
 
-always_ff @(posedge dly_clk or negedge reset) begin                  
+always_ff @(posedge clk_crypto or negedge reset) begin                  
 //setting up modes
 if(!reset) begin
 inhibit <= 1'b0;
