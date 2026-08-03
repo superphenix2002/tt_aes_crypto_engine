@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2024 Anirban Sarkar
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+`default_nettype none
+
+
 module sub_bytes(input logic [7:0] s_box[16][16],
 input logic [7:0] data_mat00,
 input logic [7:0] data_mat01,
