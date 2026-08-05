@@ -4,7 +4,7 @@
 # defaults
 SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
-TOPLEVEL_LANG ?= verilog
+TOPLEVEL_LANG ?= SystemVerilog
 SRC_DIR = $(PWD)/../src
 PROJECT_SOURCES = add_rnd_key.sv aes_crypto_engine.sv aes_decrypt_new.sv aes_encrypt_new.sv aes_wrapper.sv crypto_clk_module.sv gen_rnd_key.sv mix_cols.sv mix_cols_decrypt.sv shift_rows.sv shift_rows_decrypt.sv sub_bytes.sv
 
