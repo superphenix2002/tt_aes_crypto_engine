@@ -12,7 +12,7 @@ input logic mosi,
 output logic miso,
 input logic sclk,             // SPI clk = 60MHz
 input logic ss,           // Slave select
-  input logic reset);      // reset_n - low to reset         (Power on Reset functionality)        
+input logic reset);      // reset_n - low to reset         (Power on Reset functionality)        
 
 logic key_sampling_mode;   //sampling 256 bit key mode         ,cmd word :  01 hex            MSB first
 logic operation_mode;      //encryption or decryption selection mode  , cmd word :  02 hex
