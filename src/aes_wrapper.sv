@@ -77,6 +77,7 @@ logic [7:0] output_buff32;
 logic [7:0] output_buff33;
 
 assign reset_buff = key_ok & data_ok & crypto_ok;
+assign dly_clk = clk_crypto;
 
 crypto_clk_synth synth1(
 .clk(sclk),
@@ -85,7 +86,7 @@ crypto_clk_synth synth1(
 .reset(reset));
 
 crypto_engine engine1(
-.clk(clk_crypto),
+  .clk(dly_clk),
 .initial_key(initial_key_buff),
 .encrypt(encrypt_buff),
 .reset(reset_buff),
@@ -124,7 +125,7 @@ crypto_engine engine1(
 .ready(output_rdy));
 
 
-always_ff @(posedge clk_crypto or negedge reset) begin                  
+  always_ff @(posedge dly_clk or negedge reset) begin                  
 //setting up modes
 if(!reset) begin
 inhibit <= 1'b0;
